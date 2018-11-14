@@ -15,6 +15,12 @@ const BASE_PATH = '../../src/';
     return [
       {
         type: 'add',
+        path: `${BASE_PATH}${data.path}/package.json`,
+        templateFile: 'component/package.hbs',
+        abortOnFail: true
+      },
+      {
+        type: 'add',
         path: `${BASE_PATH}${data.path}/${data.name}.js`,
         templateFile: 'component/class.hbs',
         abortOnFail: true
