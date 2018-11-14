@@ -4,6 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
 import HeaderContainer from '../HeaderContainer';
 import NavigationContainer from '../NavigationContainer';
+import MainContent from '../MainContent';
 
 const styles = theme => ({
   root: {
@@ -20,6 +21,7 @@ class App extends Component {
           <CssBaseline />
           <HeaderContainer />
           <NavigationContainer />
+          <MainContent />
         </div>
       </Router>
     );
