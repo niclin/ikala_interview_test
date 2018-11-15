@@ -17,6 +17,7 @@ class ScheduleList extends Component {
       <div className={classes.root}>
         <Typography variant="subtitle1" color="inherit">
           2018/11/1 從 台北 到 高雄 列車時刻查詢結果：
+
         </Typography>
         <ResultTable />
       </div>

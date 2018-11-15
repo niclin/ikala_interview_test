@@ -1,4 +1,4 @@
-import axios from 'axios';
+import Api from '../helpers/api'
 
 export const FETCH_STATIONS_REQUEST = 'FETCH_STATIONS_REQUEST';
 export const FETCH_STATIONS_FAILURE = 'FETCH_STATIONS_FAILURE';
@@ -22,10 +22,7 @@ export const fetchStations = () => {
   return (dispatch) => {
     dispatch(fetchRequest);
 
-    return axios({
-      method: 'get',
-      url: 'https://ptx.transportdata.tw/MOTC/v2/Rail/THSR/Station?$select=StationID%2CStationName&$format=JSON'
-    })
+    return Api.getAllStations()
       .then(
         response => {
           dispatch(fetchSuccess(response.data));
