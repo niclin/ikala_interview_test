@@ -20,7 +20,7 @@ const fetchSuccess = (list) => ({
 
 export const fetchStations = () => {
   return (dispatch) => {
-    dispatch(fetchRequest);
+    dispatch(fetchRequest());
 
     return Api.getAllStations()
       .then(

@@ -1,8 +1,12 @@
 import { combineReducers } from  'redux';
-import navigation from '../reducers/navigation';
-import stations from '../reducers/stations';
+import navigation from './navigation';
+import stations from './stations';
+import schedule from './schedule';
+import price from './price';
 
 export default combineReducers({
   navigation,
-  stations
+  stations,
+  schedule,
+  price,
 });

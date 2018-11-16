@@ -12,7 +12,7 @@ const styles = theme => ({
 
 class ScheduleList extends Component {
    render() {
-    const { classes } = this.props;
+    const { classes, price } = this.props;
      return (
       <div className={classes.root}>
         <Typography variant="subtitle1" color="inherit">

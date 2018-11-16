@@ -10,6 +10,10 @@ class Api {
   getAllStations () {
     return this.$http.get(`Station?$select=StationID%2CStationName&$format=JSON`)
   }
+
+  getStationPrice ({ originStationID, destinationStationID }) {
+    return this.$http.get(`ODFare/${originStationID}/to/${destinationStationID}?$format=JSON`)
+  }
 }
 
 export default new Api()
