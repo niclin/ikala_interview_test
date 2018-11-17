@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ScheduleSearchFormContainer from '../../containers/ScheduleSearchFormContainer';
 import { FORM_TYPES } from '../../components/SearchForm';
-import ScheduleList from '../../components/ScheduleList';
+import ScheduleListContainer from '../../containers/ScheduleListContainer';
 
 class SchedulePage extends Component {
    render() {
@@ -11,7 +11,7 @@ class SchedulePage extends Component {
           type={FORM_TYPES.SCHEDULE}
           title="查詢列車時刻："
         />
-        <ScheduleList />
+       <ScheduleListContainer />
       </div>
     );
   }

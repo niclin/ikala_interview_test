@@ -37,7 +37,7 @@ const FIELD_NAMES = {
   DESTINATION_STATION_ID: 'destinationStationID',
 }
 
-const getStationOptions = stations =>
+const getStationOptions = (stations) =>
   [
     <option key="-1" value=""></option>
   ].concat(stations.list.map(station => (
@@ -49,78 +49,82 @@ const getStationOptions = stations =>
     </option>
   )));
 
-const getDirection = (stations, orgiginStationID, destinationStationID) => {
-  let orgIndex = 0;
-  let desIndex = 0;
-  stations.forEach((station, index) => {
-    if (station.StationID === orgiginStationID) {
-      orgIndex = index;
-    } else if (station.StationID === destinationStationID) {
-      desIndex = index;
-    }
-  });
-  return desIndex > orgIndex ? '0' : '1'; // '0: 南下', '1: 北上
-}
-
 class SearchForm extends Component {
-  state = {
-    [FIELD_NAMES.TRAIN_DATE]: '',
-    [FIELD_NAMES.ORIGIN_STATION_ID]: '',
-    [FIELD_NAMES.DESTINATION_STATION_ID]: '',
-    direction: '',
-    errMsgs: []
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      [FIELD_NAMES.TRAIN_DATE]: props.trainDate || '',
+      [FIELD_NAMES.ORIGIN_STATION_ID]: props.originStationID || '',
+      [FIELD_NAMES.DESTINATION_STATION_ID]: props.destinationStationID || '',
+      errMsgs: []
+    }
   }
-   minDayjs = dayjs().startOf('day');
-   maxDayjs = dayjs().add(27, 'day').endOf('day');
-   handleChange = name => e => {
+
+  minDayjs = dayjs().startOf('day');
+
+  maxDayjs = dayjs().add(27, 'day').endOf('day');
+
+  setDefaultState = (field, value) => {
+    if (this.state[field] === '' && value) this.setState({[field]: value});
+  }
+
+  handleChange = name => e => {
     this.setState({ [name]: e.target.value});
   }
-   handleCloseAlert = () => {
+
+  handleCloseAlert = () => {
     this.setState({ errMsgs: []})
   }
-   handleSubmit = e => {
+
+  handleSubmit = e => {
     e.preventDefault();
-     const errMsgs = [];
-     if (this.props.type === FORM_TYPES.SCHEDULE && this.state[FIELD_NAMES.TRAIN_DATE] === '') {
-      errMsgs.push('請選擇乘車日期')
+
+    const errMsgs = [];
+
+    if (this.props.type === FORM_TYPES.SCHEDULE && this.state[FIELD_NAMES.TRAIN_DATE] === '') {
+      errMsgs.push('請選擇乘車日期');
     } else {
       const trainDayjs = dayjs(this.state[FIELD_NAMES.TRAIN_DATE]);
       if (trainDayjs.isBefore(this.minDayjs) || trainDayjs.isAfter(this.maxDayjs)) {
         errMsgs.push('乘車日期超出範圍');
       }
     }
-     if (this.state[FIELD_NAMES.ORIGIN_STATION_ID] === '') {
+
+    if (this.state[FIELD_NAMES.ORIGIN_STATION_ID] === '') {
       errMsgs.push('請選擇起程站');
     }
-     if (this.state[FIELD_NAMES.DESTINATION_STATION_ID] === '') {
+
+    if (this.state[FIELD_NAMES.DESTINATION_STATION_ID] === '') {
       errMsgs.push('請選擇到達站');
     }
-     if (
+
+    if (
       this.state[FIELD_NAMES.ORIGIN_STATION_ID] !== ''
       && (this.state[FIELD_NAMES.ORIGIN_STATION_ID] === this.state[FIELD_NAMES.DESTINATION_STATION_ID])
     ) {
       errMsgs.push('起程站和到達站不得相同');
     }
-     this.setState({errMsgs});
-     if (errMsgs.length > 0) return;
-     this.setState({
-      direction: getDirection(
-        this.props.stations.list,
-        this.state[FIELD_NAMES.ORIGIN_STATION_ID],
-        this.state[FIELD_NAMES.DESTINATION_STATION_ID]
-      )
-    });
+
+    this.setState({errMsgs});
+
+    if (errMsgs.length > 0) return;
 
     const { submit } = this.props;
-    console.log(submit, typeof submit);
     if (typeof submit === 'function') submit(this.state);
   }
-   render() {
-    const { classes, type, title, stations, isSubmitable } = this.props;
+
+  render() {
+    const { classes, type, title, stations, trainDate, originStationID, destinationStationID, isSubmitable } = this.props;
+
+    // this.setDefaultState(FIELD_NAMES.TRAIN_DATE, trainDate);
+    // this.setDefaultState(FIELD_NAMES.ORIGIN_STATION_ID, originStationID);
+    // this.setDefaultState(FIELD_NAMES.DESTINATION_STATION_ID, destinationStationID);
 
     this.minDayjs = dayjs().startOf('day');
     this.maxDayjs = dayjs().add(27, 'day').endOf('day');
-     return (
+
+    return (
       <div>
         <Typography variant="h6" color="inherit">
           {title}
@@ -136,6 +140,7 @@ class SearchForm extends Component {
                 id="date"
                 label="乘車日期 *"
                 type="date"
+                defaultValue={trainDate}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -150,6 +155,7 @@ class SearchForm extends Component {
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="origin-station">起程站 *</InputLabel>
             <NativeSelect
+              defaultValue={originStationID}
               input={<Input name="originStation" id="origin-station" />}
               onChange={this.handleChange(FIELD_NAMES.ORIGIN_STATION_ID)}
             >
@@ -159,6 +165,7 @@ class SearchForm extends Component {
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="destination-station">到達站 *</InputLabel>
             <NativeSelect
+              defaultValue={destinationStationID}
               input={<Input name="destinationStation" id="destination-station" />}
               onChange={this.handleChange(FIELD_NAMES.DESTINATION_STATION_ID)}
             >
@@ -202,6 +209,10 @@ class SearchForm extends Component {
   }
 }
 
+SearchForm.defaultProps = {
+  trainDate: dayjs().format('YYYY-MM-DD'),
+}
+
 SearchForm.propTypes = {
   classes: PropTypes.object.isRequired,
   type: PropTypes.oneOf([FORM_TYPES.SCHEDULE, FORM_TYPES.AVAILABLE_SEATS]).isRequired,
@@ -210,6 +221,9 @@ SearchForm.propTypes = {
     isFetching: PropTypes.bool.isRequired,
     list: PropTypes.array.isRequired,
   }).isRequired,
+  trainDate: PropTypes.string,
+  originStationID: PropTypes.string,
+  destinationStationID: PropTypes.string,
   isSubmitable: PropTypes.bool.isRequired,
   submit: PropTypes.func,
 }
