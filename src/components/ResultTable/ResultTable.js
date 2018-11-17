@@ -6,6 +6,17 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+
+function sortArrayBy(arr, sortBy, ascending) {
+if (sortBy === undefined) {
+  return arr.slice(0);
+} else {
+  return arr.sort((a, b) => {
+    return (a[sortBy].value - b[sortBy].value) * (ascending ? 1 : -1);
+  });
+}
+}
 
 const styles = theme => ({
   tableCell: {
@@ -15,33 +26,76 @@ const styles = theme => ({
 });
 
 class ResultTable extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      sortBy: props.initSortBy,
+      ascending: props.initAscending === undefined ? true : props.initAscending
+    }
+  }
+
+  handleSort = (sortBy) => (e) => {
+    const ascending = this.state.sortBy === sortBy ? !this.state.ascending : this.props.initAscending;
+    this.setState(state => ({
+      sortBy,
+      ascending
+    }));
+  }
    render() {
-    const { classes } = this.props;
-     return (
+    const { classes, columns, head, body } = this.props;
+    const sortedBody = sortArrayBy(body, this.state.sortBy, this.state.ascending);
+
+    return (
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell className={classes.tableCell}>車次</TableCell>
-            <TableCell className={classes.tableCell}>出發時間</TableCell>
-            <TableCell className={classes.tableCell}>到達時間</TableCell>
-            <TableCell className={classes.tableCell}>行車時間</TableCell>
-            <TableCell className={classes.tableCell}>票價</TableCell>
+            {
+              columns.map(col => {
+                const text = head[col.key].text;
+                return (
+                  <TableCell
+                    className={classes.tableCell}
+                    key={ col.key }
+                  >
+                    {
+                      col.sortable ? (
+                        <TableSortLabel
+                          active={this.state.sortBy === col.key}
+                          direction={this.state.ascending ? 'asc' : 'desc'}
+                          onClick={this.handleSort(col.key)}
+                        >
+                          {text}
+                        </TableSortLabel>
+                      ) : text
+                    }
+                  </TableCell>
+                );
+              })
+            }
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow>
-            <TableCell className={classes.tableCell}>123</TableCell>
-            <TableCell className={classes.tableCell}>00:00</TableCell>
-            <TableCell className={classes.tableCell}>23:59</TableCell>
-            <TableCell className={classes.tableCell}>12:34</TableCell>
-            <TableCell className={classes.tableCell}>$1499</TableCell>
-          </TableRow>
+          {
+            sortedBody.map(row => {
+              return (
+                <TableRow key={row.key}>
+                  {
+                    columns.map(col => {
+                      const text = row[col.key].text || row[col.key].value;
+                      return (
+                        <TableCell className={classes.tableCell} key={ col.key }>{ text }</TableCell>
+                      );
+                    })
+                  }
+                </TableRow>
+              )
+            })
+          }
         </TableBody>
       </Table>
     );
   }
 }
-
 ResultTable.propTypes = {
   classes: PropTypes.object.isRequired
 }
