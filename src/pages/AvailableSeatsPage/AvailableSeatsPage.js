@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-import AvailableSeatsSearch from '../../components/AvailableSeatsSearch';
-import AvailableSeatsList from '../../components/AvailableSeatsList';
+import AvailableSeatsSearchFormContainer from '../../containers/AvailableSeatsSearchFormContainer';
+import { FORM_TYPES } from '../../components/SearchForm';
+import AvailableSeatsListContainer from '../../containers/AvailableSeatsListContainer';
 
 class AvailableSeatsPage extends Component {
    render() {
     return (
       <div>
-        <AvailableSeatsSearch />
-        <AvailableSeatsList />
+        <AvailableSeatsSearchFormContainer
+          type={FORM_TYPES.AVAILABLE_SEATS}
+          title="查詢尚有座位列車："
+        />
+        <AvailableSeatsListContainer />
       </div>
     );
   }
