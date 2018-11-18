@@ -30,8 +30,11 @@ const getTableBody = (scheduleData, priceData) => scheduleData.map(schedule => {
   const durationMin = Math.round(duration / 1000 / 60);
   const durationStr = `${pad(Math.floor(durationMin / 60), 2)}:${pad(durationMin % 60, 2)}`;
 
-  const price = Number(priceData[0].Fares.find(fare => fare.TicketType === '標準').Price);
-  const priceStr = `$${price.toLocaleString('en')}`;
+  const standardPrice = Number(priceData[0].Fares.find(fare => fare.TicketType === '標準').Price);
+  const businessPrice = Number(priceData[0].Fares.find(fare => fare.TicketType === '商務').Price);
+  const freedomPrice = Number(priceData[0].Fares.find(fare => fare.TicketType === '自由').Price);
+
+  const priceStr = `標準: $${standardPrice.toLocaleString('en')} / 商務: $${businessPrice.toLocaleString('en')} / 自由: $${freedomPrice.toLocaleString('en')}`;
   return {
     key: trainNo,
     trainNo: {
@@ -50,7 +53,6 @@ const getTableBody = (scheduleData, priceData) => scheduleData.map(schedule => {
       text: durationStr
     },
     price: {
-      value: price,
       text: priceStr
     }
   }

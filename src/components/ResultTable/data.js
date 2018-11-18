@@ -2,8 +2,8 @@ export const columns = [
   { key: 'trainNo', sortable: false },
   { key: 'originTime', sortable: true },
   { key: 'destinationTime', sortable: true },
-  { key: 'duration', sortable: true},
-  { key: 'price', sortable: true}
+  { key: 'duration', sortable: true },
+  { key: 'price', sortable: true }
 ];
 
 export const head = {
