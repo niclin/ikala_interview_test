@@ -22,7 +22,7 @@ const styles = theme => ({
 
 class AvailableSeatsSearch extends Component {
    render() {
-    const { classes } = this.props;
+    const { classes, isSubmitable } = this.props;
 
     return (
       <div>

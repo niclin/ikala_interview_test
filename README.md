@@ -1,44 +1,87 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## ikala StraaS Front-end 考題
 
-In the project directory, you can run:
+請於一個星期內完成
+使用 git archive 將整個 repository 打包並寄回給 tiffany.chen@ikala.tv
 
-### `npm start`
+請設計一個 SPA，SPA 設計方向如下：
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+請設計一個高鐵時刻查詢 Web App ，功能如下
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+總共兩頁
 
-### `npm test`
+主體左邊是一個 Navigation Bar ，可以在兩頁間切換
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 第一頁功能要求：
+使用者輸入乘車日期、起站與訖站 ID ，按下查詢後，應呈現一個表格並列出至少以下欄位
 
-### `npm run build`
+- 起站名稱
+- 起站發車時間
+- 訖站名稱
+- 訖站到達時間
+- 總共乘車時間
+- 票價
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+該頁有提供額外的控制項，能夠針對 “總共乘車時間”，”票價” 進行升序或降序排序
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+須有適當的錯誤處理
+使用者輸入的日期超過查詢範圍，會提示使用者
+若 API 回應出現錯誤，系統要能辦別並提示使用者
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+為完成上述功能，請參考以下網站使用該網站的 API
 
-### `npm run eject`
+https://ptx.transportdata.tw/MOTC/Swagger/#/THSRApi
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+主要 API (若有其它需要的資訊，請自行上該網查詢與研究)
+`GET /v2/Rail/THSR/DailyTimetable/OD/{OriginStationID}/to/{DestinationStationID}/{TrainDate}`
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 第二頁功能要求
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+使用者想了解當天某一站是否對號座還有座位，所以這頁要能提供相關資訊
 
-## Learn More
+使用者輸入起站與訖站，按下查詢後，應呈現一個表格，該表格滿足以下條件
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+列出尚未發車的車次，已經發車的要排除不顯示
+標準車箱與商務車箱皆已滿坐的要排除不顯示
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+該表格需列出以下欄位：
+
+- 起站名稱
+- 起站發車時間
+- 訖站名稱
+- 訖站到達時間
+- 總共乘車時間
+- 票價 (如果是標準車箱有座位列標準車箱票價，否則就是商務車箱的票價，並提示使用者這是商務車箱票價)
+
+如果起站與訖站間已無任何座位可販售，則不顯示該表格，直接提示使用者已無座位可販售
+
+與第一頁要求相同須包含錯誤處理
+
+主要 API (若有其它需要的資訊，請自行上該網查詢與研究)
+
+`GET /v2/Rail/THSR/AvailableSeatStatusList/{StationID}`
+
+網頁樣版示意圖:
+
+![](mockup.png)
+
+## 技術要求:
+
+- 請讓我們可以了解到平常你使用版本控制工作的流程
+- 利用 modern js 來完成以上要求
+- 請保持你的程式碼方便閱讀、溝通
+
+使用最新版本的 React 框架
+使用 以 React 為基礎的 UI Compoents 來設計 UI
+參考： https://material-ui.com/ (可自由發揮，但一定要是 React UI Components)
+
+第一頁與第二頁間的切換可以自行處理，也可以使用 React-router
+
+## 加分題：
+
+- 使用 Redux 管理狀態流
+- 撰寫 unit test or e2e test
+
+
