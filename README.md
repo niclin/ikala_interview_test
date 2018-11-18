@@ -1,5 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+對 react 掌握並不深，本專案參考其他面試者寫的解答 -> https://github.com/xashiex/ex-thsr-schedule
+
 ## ikala StraaS Front-end 考題
 
 請於一個星期內完成
